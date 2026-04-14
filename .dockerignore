@@ -1,0 +1,55 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment variables (IMPORTANT)
+.env
+.env.*
+*.env
+
+# Django specific
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Collected static (if using collectstatic)
+static/
+
+# Git
+.git/
+.gitignore
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Docker (not needed inside image)
+Dockerfile
+.dockerignore
+
+# Temporary / misc
+*.swp
+*.tmp
+*.bak
+
+# Node (if frontend included)
+node_modules/
+npm-debug.log
+yarn-error.log
