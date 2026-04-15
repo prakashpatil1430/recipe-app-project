@@ -10,33 +10,37 @@ WORKDIR /app
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements-dev.txt /tmp/requirements-dev.txt
 
-# Install system dependencies
+# Install runtime dependencies
 RUN apk add --no-cache \
+    libpq \
+    libffi
+
+ARG DEV=false
+
+# Install build dependencies, install Python deps, then clean up
+RUN apk add --no-cache --virtual .build-deps \
         gcc \
         musl-dev \
         libffi-dev \
-        postgresql-dev
-
-# Add build argument for dev mode
-ARG DEV=false
-
-# Create virtual environment and install dependencies
-RUN python -m venv /py && \
+        postgresql-dev \
+        linux-headers && \
+    python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     if [ "$DEV" = "true" ]; then \
         /py/bin/pip install -r /tmp/requirements-dev.txt; \
     fi && \
-    rm -rf /tmp
+    rm -rf /tmp && \
+    apk del .build-deps
 
 # Copy project files
 COPY ./app /app
 
-# Set PATH
-ENV PATH="/py/bin:$PATH"
-
-# Create non-root user
+# Add non-root user
 RUN adduser -D django-user
 USER django-user
+
+# Set PATH
+ENV PATH="/py/bin:$PATH"
 
 EXPOSE 8000
